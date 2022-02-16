@@ -1,0 +1,118 @@
+{% macro render_txt_field(field) %}
+<div class="form-group">
+    <lable for="{{ field.name }}" class="control-label">{{ field.label.text }}</lable>
+    {{ field(class_='form-control', **kwargs)|safe }}
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red;">{{ error }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endmacro %}
+
+{% macro render_txtarea_field(field) %}
+<div class="form-group">
+    <lable for="{{ field.name }}" class="control-label">{{ field.label.text }}</lable>
+    <textarea class="form-control" id="{{ field.name }}"></textarea>
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red;">{{ error }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endmacro %}
+<!--
+{% macro render_checkbox_field(field) %}
+<div class="form-group">
+    <input id="{{ form.remember_me.id }}" name="{{ form.remember_me.name }}" type="checkbox" value"y">
+    <label for="{{ form.remember_me.text }}"> {{ form.remember_me.text }}</label>
+
+
+</div>
+{% endmacro %}
+-->
+
+{% macro render_Select_field(field) %}
+<div class="form-group">
+<!--    {{ field }}
+-->
+    <lable for="{{ field.name }}">{{ field.label.text }}</lable>
+    <select class="form-control" name='{{ field.name }}' id='{{ field.name }}' style="width:auto;">
+        {% for key, value, selected in field.iter_choices() %}
+            <option value="{{ key }}">{{ value }}</option>
+        {% endfor %}
+    </select>
+
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red;">{{ error }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endmacro %}
+
+{% macro render_incrementor_field(field) %}
+<div class="form-group">
+    <lable for="{{ field.name }}">{{ field.label.text }}</lable>
+    <div class="input-group mb-3">
+        <!--<input type='button' value='-' class='qtyminus' field='{{ field.name }}'/>-->
+        <button type='submit' class='qtyminus' field='{{ field.name }}'><i class="fas fa-minus"></i></button>
+        <input type='text' style="width:50px;text-align: center;" name='{{ field.name }}' value='0' class='qty' />
+        <button type='submit' class='qtyplus' field='{{ field.name }}'><i class="fas fa-plus"></i></button>
+        <!--<input type='button' value='+' class='qtyplus' field='{{ field.name }}' />-->
+    </div>
+    <ul>
+        {% for error in field.errors %}
+            <li style="color:red;">{{ error }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endmacro %}
+
+
+{% macro render_incrementor_script() %}
+<script type=text/javascript>
+    // This button will increment the value
+    $('.qtyplus').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        fieldName = $(this).attr('field');
+        // Get its current value
+        var currentVal = parseInt($('input[name='+fieldName+']').val());
+        // If is not undefined
+        if (!isNaN(currentVal) ) {
+            // Increment
+            $('input[name='+fieldName+']').val(currentVal + 1);
+        }
+        else if (currentVal > 24) {
+            $('input[name='+fieldName+']').val(currentVal);
+        }else {
+            // Otherwise put a 0 there
+            $('input[name='+fieldName+']').val(0);
+        }
+    });
+    // This button will decrement the value till 0
+    $(".qtyminus").click(function(e) {
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        fieldName = $(this).attr('field');
+        // Get its current value
+        var currentVal = parseInt($('input[name='+fieldName+']').val());
+        // If it isn't undefined or its greater than 0
+        if (!isNaN(currentVal) && currentVal > 0) {
+            // Decrement one
+            $('input[name='+fieldName+']').val(currentVal - 1);
+        } else {
+            // Otherwise put a 0 there
+            $('input[name='+fieldName+']').val(0);
+        }
+    });
+</script>
+{% endmacro %}
+

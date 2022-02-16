@@ -1,0 +1,19 @@
+{% from "_render_field.html" import render_txt_field %}
+
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Sign In</h1>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+
+            {{ render_txt_field(form.username, placeholder=form.username.label.text) }}
+            {{ render_txt_field(form.password, placeholder=form.password.label.text) }}
+            <div class="form-group">{{ form.remember_me() }} {{ form.remember_me.label }}</div>
+            <button type="submit" class="btn btn-success">Log in</button>
+            <!--<p>{{ form.submit() }}</p>-->
+        </form>
+        <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+    </div><!-- /.container -->
+{% endblock %}

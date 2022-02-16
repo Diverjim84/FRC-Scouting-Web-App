@@ -1,0 +1,126 @@
+{% from "_render_field.html" import render_txt_field, render_Select_field, render_incrementor_field, render_incrementor_script, render_txtarea_field %}
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>
+        {% if title %}
+            {{ title }}
+        {% else %}
+            MechTech Scouting Report
+        {% endif %}
+    </h1>
+
+    {{ form.hidden_tag() }}
+    {{ render_Select_field(form.event) }}
+    {{ render_Select_field(form.match) }}
+    {{ render_Select_field(form.team) }}
+
+    <hr>
+
+    <div class="table-responsive">
+
+        <table id="ScoutDataTable" class="table table-hover table-bordered table-striped">
+            <thead>
+                <tr>
+                {% for c in tblCols %}
+                    <th scope="col">{{ c.name }}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+</div><!-- /.container -->
+{% endblock %}
+
+{% block scripts %}
+{{ render_incrementor_script() }}
+<script>
+    let event_select = document.getElementById('{{ form.event.name }}');
+    let match_select = document.getElementById('{{ form.match.name }}');
+    let team_select = document.getElementById('{{ form.team.name }}');
+
+    event_select.onchange = function() {
+        event_id = event_select.value;
+
+        fetch('/StandScout/matches?event_id=' + event_id).then(function(response) {
+            response.json().then(function(data) {
+                let OptionHTML = '';
+
+                for(let match of data.matches){
+                    OptionHTML += '<option value="'+match.id+'">'+match.name+'</option>';
+
+                }
+
+                match_select.innerHTML = OptionHTML;
+                match_id = match_select.value;
+
+                fetch('/StandScout/teams?match_id=' + match_id).then(function(response) {
+                    response.json().then(function(data) {
+                        let OptionHTML = '';
+
+                        for(let team of data.teams){
+                            OptionHTML += '<option value="'+team.id+'">'+team.name+'</option>';
+                        }
+
+                        team_select.innerHTML = OptionHTML;
+                    });
+                });
+            });
+
+        });
+    }
+    onload = function() {
+        event_id = event_select.value;
+        let firstMatchId = -1;
+
+        fetch('/StandScout/matches?event_id=' + event_id).then(function(response) {
+            response.json().then(function(data) {
+                let OptionHTML = '';
+
+                for(let match of data.matches){
+                    OptionHTML += '<option value="'+match.id+'">'+match.name+'</option>';
+                    if(firstMatchId == -1){
+                        firstMatchId = match.id;
+                    }
+                }
+                match_select.innerHTML = OptionHTML;
+                match_id = match_select.value;
+
+                fetch('/StandScout/teams?match_id=' + match_id).then(function(response) {
+                    response.json().then(function(data) {
+                        let OptionHTML = '';
+
+                        for(let team of data.teams){
+                            OptionHTML += '<option value="'+team.id+'">'+team.name+'</option>';
+                        }
+
+                        team_select.innerHTML = OptionHTML;
+                    });
+                });
+            });
+        });
+    }
+
+    match_select.onchange = function() {
+        match_id = match_select.value;
+
+        fetch('/StandScout/teams?match_id=' + match_id).then(function(response) {
+            response.json().then(function(data) {
+                let OptionHTML = '';
+
+                for(let team of data.teams){
+                    OptionHTML += '<option value='+team.id+'>'+team.name+'</option>';
+                }
+
+                team_select.innerHTML = OptionHTML;
+            });
+
+        });
+    }
+
+
+</script>
+
+{% endblock %}

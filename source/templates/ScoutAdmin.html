@@ -1,0 +1,47 @@
+{% from "_render_field.html" import render_txt_field, render_Select_field, render_incrementor_field, render_incrementor_script %}
+
+{% extends "base.html" %}
+
+{% block head %}
+
+
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form action="" method="post" novalidate>
+        {{ render_Select_field(form.task) }}
+        <button type="submit" class="run" field='{{ form.task.name }}'>Run</button>
+        <p id="result">...</p>
+    </form>
+    <a href="{{ url_for('defineEvent') }}" >
+        <button type="submit" class="btn btn-success" >Add Event</button>
+    </a>
+    <a href="{{ url_for('insertAllTeams') }}" >
+        <button type="submit" class="btn btn-success" >Insert All Teams</button>
+    </a>
+    <a href="{{ url_for('insertAllMatches') }}" >
+        <button type="submit" class="btn btn-success" >Insert All Matches</button>
+    </a>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!--<script type=text/javascript>
+/*    $('.run').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        $.getJSON('/background_process_updateEvents', {
+                task: $('select[name="{{ form.task.name }}"]').val(),
+            }, function(data) {
+                $("#result").text(data.result);
+            });
+            return false;
+    });
+*/
+
+
+</script>-->
+{% endblock %}

@@ -1,0 +1,18 @@
+{% from "_render_field.html" import render_txt_field, render_Select_field, render_incrementor_field, render_incrementor_script %}
+
+{% extends "base.html" %}
+
+{% block head %}
+
+
+{% endblock %}
+{% block content %}
+<div class="container">
+    <form action="" method="post" novalidate>
+        {{ render_Select_field(form.event) }}
+        <button type="submit" class="btn btn-success" >Insert All Teams</button>
+    </form>
+</div>
+
+{% endblock %}
+
